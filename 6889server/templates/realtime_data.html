@@ -28,9 +28,9 @@
                     </div>
                     <div class="col s12 m6">
                         <ul id="tabs-swipe-demo" class="tabs">
-                                <li class="tab col s3"><a calss="active" href="#test-swipe-1">Test 1</a></li>
-                                <li class="tab col s3"><a class="#test-swipe-2" href="#test-swipe-2">Test 2</a></li>
-                                <li class="tab col s3"><a href="#test-swipe-3">Test 3</a></li>
+                                <li class="tab col s3" ><a calss="active" href="#test-swipe-1">1 Min</a></li>
+                                <li class="tab col s3" ><a class="#test-swipe-2" href="#test-swipe-2">5 Min</a></li>
+                                <li class="tab col s3"><a href="#test-swipe-3">1 Hour</a></li>
                         </ul>
 
                         <div class="tabs-content carousel carousel-slider" style="height: 400px; width: 400px;">
@@ -38,21 +38,26 @@
                             <div id="test-swipe-1" 
                             class="col s12 transparent carousel-item active" 
                             style="z-index: 0; opacity: 1; visibility: visible; transform: translateX(0px) translateX(0px) translateX(0px) translateZ(0px);">
-                                <div class="canvas">
+                                <div class="canvas1">
                     
                                 </div></canvas>
+                                
                             </div>
 
                             <div id="test-swipe-2" 
-                            class="col s12 red carousel-item" 
+                            class="col s12 transparent carousel-item" 
                             style="transform: translateX(0px) translateX(400px) translateZ(0px); z-index: -1; opacity: 1; visibility: visible;">
-                            Test 2
+                                <div class="canvas2">
+                    
+                                </div></canvas>
                             </div>
                             
                             <div id="test-swipe-3" 
-                            class="col s12 green carousel-item" 
+                            class="col s12 transparent carousel-item" 
                             style="transform: translateX(0px) translateX(800px) translateZ(0px); z-index: -1; opacity: 1; visibility: visible;">
-                            Test 3
+                                <div class="canvas3">
+
+                                </div></canvas>
                             </div>
 
                         </div>
@@ -62,9 +67,9 @@
 
         <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase-firestore.js"></script>
-        <script>
+        <!-- <script>
         // Initialize Firebase
-        var config = {
+        var fbConfig = {
             apiKey: "AIzaSyCVSjiQRnhSINYJwDV2qah0oZeiEM1Cdbc",
             authDomain: "d3-project-3aac0.firebaseapp.com",
             databaseURL: "https://d3-project-3aac0.firebaseio.com",
@@ -72,11 +77,12 @@
             storageBucket: "d3-project-3aac0.appspot.com",
             messagingSenderId: "423414920527"
         };
-        firebase.initializeApp(config);
+        firebase.initializeApp(fbConfig);
         const db = firebase.firestore();
         db.settings({ timestampsInSnapshots: true })
 
-        </script>
+        </script> -->
+        <script src="../static/js/connectFireBase.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
         <script src="https://d3js.org/d3.v5.js"></script>
         <script src="../static/js/realtime_data.js"></script>
