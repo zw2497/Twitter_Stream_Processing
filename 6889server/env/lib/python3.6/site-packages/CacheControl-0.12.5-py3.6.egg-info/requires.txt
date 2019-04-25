@@ -1,8 +1,0 @@
-requests
-msgpack
-
-[filecache]
-lockfile>=0.9
-
-[redis]
-redis>=2.10.5
