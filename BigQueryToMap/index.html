@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #map {
+        height: 500px;
+        width: 600px;
+      }
+
+      .timeArea {
+        border-radius: 5px;
+        line-height: 2.1;
+        border: 1px solid black;
+        width: 220px;
+      }
+
+      .basic {
+        margin-top: 25px;
+        margin-bottom: -25px;
+      }
+
+      .list-group {
+        max-height: 600px;
+        margin-bottom: 10px;
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .list-group-item:hover {
+        transform: scale(1.1);
+        /* background: #5e92e5;
+        color: blanchedalmond; */
+      }
+    </style>
+
+    <script src="assets/js/heatmap.js"></script>
+    <script src="assets/js/askRespFromBigQuery.js"></script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFvLeM5uyO0AMCm0Sshez2pcHApFB6x0A&libraries=visualization&callback=initMap&amp;language=en"
+    ></script>
+  </head>
+
+  <body>
+    <div class="container basic">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-5">
+                Start:
+                <input id="startTime" class="timeArea" type="datetime-local" />
+              </div>
+              <div class="col-md-5">
+                End:
+                <input id="endTime" class="timeArea" type="datetime-local" />
+              </div>
+
+              <div class="col-md-2 align-self-end">
+                <button
+                  class="btn btn-info"
+                  id="sendQuery"
+                  onclick="sendQuery()"
+                >
+                  SEND
+                </button>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div id="map"></div>
+        </div>
+
+        <div class="col-md-4">
+          <ul class="list-group list-group-flush" id="tweetList"></ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
