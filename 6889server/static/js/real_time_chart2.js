@@ -115,33 +115,34 @@ const update2 = data2 => {
 var data2 = [];
 var totalData2 = [];
 
-db.collection("topk10")
-  .orderBy("count", "desc")
-  .onSnapshot(res => {
-    res.docChanges().forEach(change => {
-      const doc = { ...change.doc.data(), id: change.doc.id };
+db.collection("topk10").onSnapshot(res => {
+  res.docChanges().forEach(change => {
+    const doc = { ...change.doc.data(), id: change.doc.id };
 
-      switch (change.type) {
-        case "added":
-          totalData2.push(doc);
-          break;
+    switch (change.type) {
+      case "added":
+        totalData2.push(doc);
+        break;
 
-        case "modified":
-          const index = totalData2.findIndex(item => item.id == doc.id);
-          totalData2[index] = doc;
-          break;
+      case "modified":
+        const index = totalData2.findIndex(item => item.id == doc.id);
+        totalData2[index] = doc;
+        break;
 
-        case "removed":
-          totalData2 = totalData2.filter(item => item.id !== doc.id);
-          break;
+      case "removed":
+        totalData2 = totalData2.filter(item => item.id !== doc.id);
+        break;
 
-        default:
-          break;
-      }
-    });
-    data2 = totalData2.slice(0, 10);
-    update2(data2);
+      default:
+        break;
+    }
   });
+  totalData2.sort(function(a, b) {
+    return b.count - a.count;
+  });
+
+  update2(totalData2);
+});
 
 const heightTween2 = d => {
   let i2 = d3.interpolate(0, y2.bandwidth());

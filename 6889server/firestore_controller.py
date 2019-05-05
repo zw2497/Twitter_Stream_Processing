@@ -128,14 +128,11 @@ def main():
 
     p1 = Process(target=getTopk1, args=(db,))
     p2 = Process(target=getTopk10, args=(db,))
-    # p3 = Process(target=getTopk10, args=(db,))
 
     p1.start()
     p2.start()
-    # p3.start()
     p1.join()
     p2.join()
-    # p3.join()
 
 
 if __name__ == '__main__':

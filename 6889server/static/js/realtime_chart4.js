@@ -3,7 +3,7 @@ function wordCloud() {
 
   //Construct the word cloud's SVG element
   var svg = d3
-    .select(".canvas1")
+    .select(".canvas2")
     .append("svg")
     .attr("width", 500)
     .attr("height", 500)
@@ -81,10 +81,9 @@ function getWords(words) {
     });
 }
 function showNewWords(vis) {
-  var data2 = [];
-  var totalData2 = [];
+  var totalData = [];
 
-  db.collection("topk1")
+  db.collection("topk10")
     .orderBy("count", "desc")
     .onSnapshot(res => {
       res.docChanges().forEach(change => {
@@ -92,29 +91,29 @@ function showNewWords(vis) {
 
         switch (change.type) {
           case "added":
-            totalData2.push(doc);
+            totalData.push(doc);
             break;
 
           case "modified":
-            const index = totalData2.findIndex(item => item.id == doc.id);
-            totalData2[index] = doc;
+            const index = totalData.findIndex(item => item.id == doc.id);
+            totalData[index] = doc;
             break;
 
           case "removed":
-            totalData2 = totalData2.filter(item => item.id !== doc.id);
+            totalData = totalData.filter(item => item.id !== doc.id);
             break;
 
           default:
             break;
         }
       });
-      var words = "";
-      console.log(totalData2);
-      for (let i in totalData2) {
-        words += totalData2[i].tag + " ";
+      var words2 = "";
+      console.log(totalData);
+      for (let i in totalData) {
+        words2 += totalData[i].tag + " ";
       }
       //   console.log(words);
-      vis.update(getWords(words));
+      vis.update(getWords(words2));
     });
 }
 

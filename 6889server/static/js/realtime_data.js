@@ -93,10 +93,6 @@ const update = data => {
     .text(d => d.count)
     .attr("fill", "black")
     .attr("font-size", 20);
-  // .attr("x", d => x(d.count))
-  // .attr("y", d => {
-  //   return y(d.tag) + 20;
-  // });
 
   text
     .enter()
@@ -121,37 +117,36 @@ const update = data => {
     .attr("text-anchor", "end");
 };
 
-var data = [];
 var totalData = [];
 
-db.collection("topk1")
-  .orderBy("count", "desc")
-  .onSnapshot(res => {
-    res.docChanges().forEach(change => {
-      const doc = { ...change.doc.data(), id: change.doc.id };
+db.collection("topk1").onSnapshot(res => {
+  res.docChanges().forEach(change => {
+    const doc = { ...change.doc.data(), id: change.doc.id };
 
-      switch (change.type) {
-        case "added":
-          totalData.push(doc);
-          break;
+    switch (change.type) {
+      case "added":
+        totalData.push(doc);
+        break;
 
-        case "modified":
-          const index = totalData.findIndex(item => item.id == doc.id);
-          totalData[index] = doc;
-          break;
+      case "modified":
+        const index = totalData.findIndex(item => item.id == doc.id);
+        totalData[index] = doc;
+        break;
 
-        case "removed":
-          totalData = totalData.filter(item => item.id !== doc.id);
-          break;
+      case "removed":
+        totalData = totalData.filter(item => item.id !== doc.id);
+        break;
 
-        default:
-          break;
-      }
-    });
-
-    data = totalData.slice(0, 10);
-    update(data);
+      default:
+        break;
+    }
   });
+
+  totalData.sort(function(a, b) {
+    return b.count - a.count;
+  });
+  update(totalData);
+});
 
 const heightTween = d => {
   let i = d3.interpolate(0, y.bandwidth());
