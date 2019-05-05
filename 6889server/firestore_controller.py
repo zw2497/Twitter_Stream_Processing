@@ -17,7 +17,7 @@ def getTopk1(db):
         'fast',
         bootstrap_servers=['35.243.144.79:9092'],
         auto_offset_reset='latest',
-        enable_auto_commit=True,
+        enable_auto_commit=False,
         group_id=id
     )
     prev = ""
@@ -30,6 +30,7 @@ def getTopk1(db):
         topic = str(data[0])
         count = int(data[1])
         sentiment = (float(data[2]) + 1) / 2
+        print("fast", str(timestamp), topic)
         if prev != timestamp:
             prev = timestamp
             heap.sort()
@@ -50,6 +51,8 @@ def getTopk1(db):
                         u'topk1').document(str(i+1)), items[i])
                 batch.commit()
                 items = []
+            else:
+                print("less than 10")
             heap = []
             tags = set()
             if topic not in tags:
@@ -69,7 +72,7 @@ def getTopk10(db):
         'slow',
         bootstrap_servers=['35.243.144.79:9092'],
         auto_offset_reset='latest',
-        enable_auto_commit=True,
+        enable_auto_commit=False,
         group_id=id
     )
 

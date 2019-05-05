@@ -4,7 +4,7 @@ const svg2 = d3
   .attr("width", 700)
   .attr("height", 450);
 
-const t2 = d3.transition().duration(1500);
+const t2 = d3.transition().duration(2500);
 
 // create margins and dimensions
 const margin2 = { top: 20, right: 20, bottom: 40, left: 150 };
@@ -57,8 +57,7 @@ const update2 = data2 => {
       // return inter(d.sentiment).colors[0];
     })
     .transition(t2)
-    .attr("width", d => x2(d.count))
-    .attr("font-size", 20);
+    .attr("width", d => x2(d.count));
 
   rects2
     .enter()
@@ -80,8 +79,7 @@ const update2 = data2 => {
     .merge(rects2)
     .transition(t2)
     .attrTween("height", heightTween2)
-    .attr("width", d => x2(d.count))
-    .attr("font-size", 20);
+    .attr("width", d => x2(d.count));
 
   text2
     .text(d => d.count)
@@ -89,7 +87,8 @@ const update2 = data2 => {
     .attr("x", d => x2(d.count))
     .attr("y", d => {
       return y2(d.tag) + 20;
-    });
+    })
+    .attr("font-size", 20);
   // .attr("transform", `translate(${0}, ${5})`);
 
   text2
@@ -100,7 +99,8 @@ const update2 = data2 => {
     .attr("x", d => x2(d.count))
     .attr("y", d => {
       return y2(d.tag) + 20;
-    });
+    })
+    .attr("font-size", 20);
 
   yGroup2 = yAxisGroup2.call(yAxis2);
 
