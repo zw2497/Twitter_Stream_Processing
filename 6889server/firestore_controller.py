@@ -11,139 +11,108 @@ import time
 
 
 def getTopk1(db):
-    step = 0
-    while step < 10:
-        id = 'ggggjkurccc' + str(step)
-        consumer = KafkaConsumer(
-            'topk1',
-            bootstrap_servers=['35.243.144.79:9092'],
-            auto_offset_reset='earliest',
-            enable_auto_commit=True,
-            group_id=id
-        )
-        # batch poll the data from Kafka
-        message = consumer.poll(timeout_ms=10000, max_records=None)
-        key = list(message.keys())
-        messages = message[key[0]]
-        prev = ""
-        heap = []
-        for i in range(len(messages)):
-            timestamp = messages[i].key.decode()
-            data = messages[i].value.decode().split(" ")
-            topic = str(data[0])
-            count = int(data[1]) * random.randint(1, 50)
 
-            if timestamp != prev:
-                heap.clear()
-                prev = timestamp
-            heappush(heap, (-count, topic, timestamp))
-        heap.sort()
-        print(heap)
-
-        consumer.close()
-
-        if len(heap) > 10:
-            for i in range(10):
-                item = {
-                    'tag': heap[i][1],
-                    'count': -heap[i][0]
-                }
-                c = db.collection(u'topk1').document(str(i+1))
-                c.update(item)
-
-        time.sleep(5)
-        step += 1
-
-
-def getTopk5(db):
-    step = 0
-    while step < 10:
-        id = 'ggfwgjkurbbb' + str(step)
-        consumer = KafkaConsumer(
-            'topk5',
-            bootstrap_servers=['35.243.144.79:9092'],
-            auto_offset_reset='earliest',
-            enable_auto_commit=True,
-            group_id=id
-        )
-        # batch poll the data from Kafka
-        message = consumer.poll(timeout_ms=10000, max_records=None)
-        key = list(message.keys())
-        messages = message[key[0]]
-        prev = ""
-        heap = []
-        for i in range(len(messages)):
-            timestamp = messages[i].key.decode()
-            data = messages[i].value.decode().split(" ")
-            topic = str(data[0])
-            count = int(data[1]) * random.randint(1, 50)
-
-            if timestamp != prev:
-                heap.clear()
-                prev = timestamp
-            heappush(heap, (-count, topic, timestamp))
-        heap.sort()
-        print(heap)
-
-        consumer.close()
-
-        if len(heap) > 10:
-            for i in range(10):
-                item = {
-                    'tag': heap[i][1],
-                    'count': -heap[i][0]
-                }
-                c = db.collection(u'topk5').document(str(i+1))
-                c.update(item)
-
-        time.sleep(10)
-        step += 1
+    id = str(time.time())
+    consumer = KafkaConsumer(
+        'fast',
+        bootstrap_servers=['35.243.144.79:9092'],
+        auto_offset_reset='latest',
+        enable_auto_commit=True,
+        group_id=id
+    )
+    prev = ""
+    heap = []
+    items = []
+    tags = set()
+    for message in consumer:
+        timestamp = message.key.decode()
+        data = message.value.decode().split(" ")
+        topic = str(data[0])
+        count = int(data[1])
+        sentiment = (float(data[2]) + 1) / 2
+        if prev != timestamp:
+            prev = timestamp
+            heap.sort()
+            if len(heap) > 10:
+                print("start1")
+                for i in range(10):
+                    print(heap[i])
+                    item = {
+                        'tag': heap[i][1],
+                        'count': -heap[i][0],
+                        'sentiment': heap[i][2]
+                    }
+                    items.append(item)
+                # update_in_transaction(transaction, db_ref, items)
+                batch = db.batch()
+                for i in range(10):
+                    batch.update(db.collection(
+                        u'topk1').document(str(i+1)), items[i])
+                batch.commit()
+                items = []
+            heap = []
+            tags = set()
+            if topic not in tags:
+                heappush(heap, (-count, topic, sentiment, timestamp))
+                tags.add(topic)
+        else:
+            if topic not in tags:
+                heappush(heap, (-count, topic, sentiment, timestamp))
+                tags.add(topic)
+    consumer.close()
 
 
 def getTopk10(db):
-    step = 0
-    while step < 10:
-        id = 'ggfwgjkuaaaa' + str(step)
-        consumer = KafkaConsumer(
-            'topk10',
-            bootstrap_servers=['35.243.144.79:9092'],
-            auto_offset_reset='earliest',
-            enable_auto_commit=True,
-            group_id=id
-        )
-        # batch poll the data from Kafka
-        message = consumer.poll(timeout_ms=10000, max_records=None)
-        key = list(message.keys())
-        messages = message[key[0]]
 
-        prev = ""
-        heap = []
-        for i in range(len(messages)):
-            timestamp = messages[i].key.decode()
-            data = messages[i].value.decode().split(" ")
-            topic = str(data[0])
-            count = int(data[1]) * random.randint(1, 50)
+    id = str(time.time()) + str(2)
+    consumer = KafkaConsumer(
+        'slow',
+        bootstrap_servers=['35.243.144.79:9092'],
+        auto_offset_reset='latest',
+        enable_auto_commit=True,
+        group_id=id
+    )
 
-            if timestamp != prev:
-                heap.clear()
-                prev = timestamp
-            heappush(heap, (-count, topic, timestamp))
-        heap.sort()
-        print(heap)
-
-        consumer.close()
-
-        if len(heap) > 10:
-            for i in range(10):
-                item = {
-                    'tag': heap[i][1],
-                    'count': -heap[i][0]
-                }
-                c = db.collection(u'topk10').document(str(i+1))
-                c.update(item)
-
-        time.sleep(10)
-        step += 1
+    prev = ""
+    heap = []
+    items = []
+    tags = set()
+    for message in consumer:
+        timestamp = message.key.decode()
+        data = message.value.decode().split(" ")
+        topic = str(data[0])
+        count = int(data[1])
+        sentiment = (float(data[2]) + 1) / 2
+        if prev != timestamp:
+            prev = timestamp
+            heap.sort()
+            if len(heap) > 10:
+                print("start2")
+                for i in range(10):
+                    print(heap[i])
+                    item = {
+                        'tag': heap[i][1],
+                        'count': -heap[i][0],
+                        'sentiment': heap[i][2]
+                    }
+                    items.append(item)
+                # update_in_transaction(transaction, db_ref, items)
+                batch = db.batch()
+                for i in range(10):
+                    batch.update(db.collection(
+                        u'topk10').document(str(i+1)), items[i])
+                batch.commit()
+                items = []
+            heap = []
+            tags = set()
+            if topic not in tags:
+                heappush(heap, (-count, topic, sentiment, timestamp))
+                tags.add(topic)
+        else:
+            if topic not in tags:
+                heappush(heap, (-count, topic, sentiment, timestamp))
+                tags.add(topic)
+    consumer.close()
 
 
 def main():
@@ -155,15 +124,15 @@ def main():
     db = firestore.client()
 
     p1 = Process(target=getTopk1, args=(db,))
-    p2 = Process(target=getTopk5, args=(db,))
-    p3 = Process(target=getTopk10, args=(db,))
+    p2 = Process(target=getTopk10, args=(db,))
+    # p3 = Process(target=getTopk10, args=(db,))
 
     p1.start()
     p2.start()
-    p3.start()
+    # p3.start()
     p1.join()
     p2.join()
-    p3.join()
+    # p3.join()
 
 
 if __name__ == '__main__':
