@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify, make_response
-import json
+from flask import Flask, request, jsonify, make_response, Response
+import json, time
 from datetime import datetime
 from google.cloud import bigquery
+from kafka import KafkaConsumer 
 
 '''
 `pip install --upgrade google-cloud-bigquery`
@@ -10,6 +11,12 @@ Give authentication by the myAuth.json to the client
 '''
 app = Flask(__name__)
 client = bigquery.Client()
+
+
+@app.route("/")
+def index():
+    return "Just a test."
+
 
 @app.route("/getquery", methods=['GET', 'POST'])
 def getquery():
@@ -52,9 +59,39 @@ def getquery():
     response.headers.add("Access-Control-Allow-Origin", "*")
     response.headers.add("Access-Control-Allow-Headers", "*")
     response.headers.add("Access-Control-Allow-Methods", "*")
-    response.headers
     return response
 
 
+@app.route("/gettrend", methods=['GET', 'POST'])
+def gettrend():
+    groupid = str(time.time())
+    consumer = KafkaConsumer(
+        'trend',
+        bootstrap_servers=['35.243.144.79:9092'],
+        auto_offset_reset='earliest',
+        enable_auto_commit=False,
+        group_id=groupid
+    )
+    a = []
+
+    def generate(consumer, a):
+        start_time = time.time()
+        for message in consumer:
+            key, value = message.key, message.value
+            a.append([key.decode(), value.decode()])
+            if time.time() - start_time > 1:
+                a.sort(key=lambda x: -float(x[1]))
+                yield(str(dict(a[:10])).replace('\'', '\"'))
+                # print(a[:10])
+                a = []
+                start_time = time.time()
+
+    resp = Response(generate(consumer, a))
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Headers'] = '*'
+    resp.headers['Access-Control-Allow-Methods'] = '*'
+    return resp
+
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=6677, debug=True)
+    app.run(host='0.0.0.0', port=6789, debug=True)

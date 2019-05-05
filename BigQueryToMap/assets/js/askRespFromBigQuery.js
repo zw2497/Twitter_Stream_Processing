@@ -3,7 +3,7 @@ function sendQuery() {
   var endDate = document.getElementById('endTime');
 
   var xhr = new XMLHttpRequest();
-  var url = 'http://localhost:6677/getquery';
+  var url = 'http://localhost:6789/getquery';
   var params = new FormData();
   params.append('start', startDate.value);
   params.append('end', endDate.value);
