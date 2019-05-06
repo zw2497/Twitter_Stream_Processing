@@ -3,7 +3,7 @@ var map;
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 3.8,
-    center: { lat: 37, lng: -95 },
+    center: { lat: 37, lng: -98 },
     //draggable: false
     //mapTypeId: 'hybrid'
     zoomControl: false,
@@ -136,6 +136,7 @@ function eqfeed_callback(results) {
     data: heatmapData,
     dissipating: false,
     map: map,
+    radius: 1,
     gradient: [
       'rgba(0, 255, 255, 0)',
       'rgba(0, 255, 255, 1)',

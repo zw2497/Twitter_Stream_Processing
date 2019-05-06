@@ -24,6 +24,10 @@
         width: 220px;
       }
 
+      .countArea {
+        width: 10px;
+      }
+
       .basic {
         margin-top: 25px;
         margin-bottom: -25px;
@@ -44,6 +48,10 @@
 
       .btn-custom {
         background: #03a9f4;
+      }
+
+      .link-type {
+        text-decoration: none;
       }
     </style>
 
@@ -87,7 +95,7 @@
             ><i class="large left material-icons">insert_chart</i>Twitter
             Visualizer</a
           >
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <ul id="nav-mobile" class="right hide-on-med-and-down link-type">
             <li><a href="index.html">Project Introduction</a></li>
             <li><a href="realtime_data.html">TopK</a></li>
             <li><a href="wordcloud.html">WordCloud</a></li>
@@ -102,15 +110,18 @@
         <div class="col-md-8">
           <div class="container">
             <div class="row">
-              <div class="col-md-5">
+              <div class="col-md-4">
                 Start:
                 <input id="startTime" class="timeArea" type="datetime-local" />
               </div>
-              <div class="col-md-5">
+              <div class="col-md-4">
                 End:
                 <input id="endTime" class="timeArea" type="datetime-local" />
               </div>
-
+              <div class="col-md-2">
+                Count:
+                <input id="count" class="countArea" type="text" />
+              </div>
               <div class="col-md-2 align-self-end">
                 <button
                   class="btn btn-info"

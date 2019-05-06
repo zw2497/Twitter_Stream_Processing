@@ -11,11 +11,6 @@ Give authentication by the myAuth.json to the client
 `export GOOGLE_APPLICATION_CREDENTIALS="./myAuth.json"`
 '''
 app = Flask(__name__)
-
-try:
-    os.system('export GOOGLE_APPLICATION_CREDENTIALS="./myAuth.json"')
-except:
-    pass
 client = bigquery.Client()
 
 
@@ -29,14 +24,16 @@ def getquery():
     try:
         start = datetime.strptime(request.form['start'], '%Y-%m-%dT%H:%M')
         end = datetime.strptime(request.form['end'], '%Y-%m-%dT%H:%M')
-
+        count = request.form['count']
+        
         QUERY = '''
-            SELECT tweetid, tweet_text, latitude as lat, longitude as lng 
-            FROM `project2-236400.twitter.IRA` 
-            WHERE latitude != "" and longitude != "" 
-                and tweet_time >= '%s' and tweet_time <= '%s' 
-            LIMIT 1000
-        ''' % (start, end)
+            SELECT id_str as tweetid, text as tweet_text, 
+                   latitude as lat, longitude as lng
+            FROM `e6820-235222.warehouse.tweet_full6` 
+            WHERE latitude is not null and longitude is not null and 
+                  created_at >= '%s' and created_at <= '%s' 
+            LIMIT %s
+        ''' % (start, end, count)
         print(QUERY)
         query_job = client.query(QUERY)  # API request
         rows = query_job.result()  # Waits for query to finish
@@ -46,13 +43,13 @@ def getquery():
             tmp_dict = {}
             tmp_dict['tid'] = row.tweetid
             tmp_dict['text'] = row.tweet_text
-            tmp_dict['lat'] = row.lat
-            tmp_dict['lng'] = row.lng
+            tmp_dict['lng'] = row.lat
+            tmp_dict['lat'] = row.lng
             json_rows.append(tmp_dict)
 
         with open('../templates/assets/js/geoData.js', 'w+') as f:
             f.write("eqfeed_callback([")
-            for row in json_rows[:-2]:
+            for row in json_rows[:-1]:
                 f.write(str(row) + ',\n')
             f.write(str(json_rows[-1]) + ']);')
     except Exception as e:
