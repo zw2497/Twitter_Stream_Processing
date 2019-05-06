@@ -18,9 +18,10 @@ window.onload = function() {
       labelFontSize: 0
     },
     axisY: {
-      maximum: 15,
+      // maximum: 20,
+      minimum: 0,
       interval: 2,
-      gridThickness: 0.5,
+      gridThickness: 0,
       labelFontSize: 0
     },
     toolTip: {
@@ -40,7 +41,7 @@ window.onload = function() {
   chart.render();
 
   var xVal = 0;
-  var dataLength = 20; // number of dataPoints visible at any point
+  var dataLength = 15; // number of dataPoints visible at any point
 
   var xhr = new XMLHttpRequest();
   var url = 'http://localhost:6789/gettrend';
@@ -55,7 +56,7 @@ window.onload = function() {
 
         dps.push({
           x: xVal,
-          y: new Number(curResp[c]) * Math.pow(10, 12)
+          y: new Number(curResp[c]) * Math.pow(10, 13)
         });
 
         historyTopics[c] = dps;
@@ -65,10 +66,9 @@ window.onload = function() {
         var dps = historyTopics[c];
         // if (dps[dps.length - 1].x != xVal) {
         //   if (
-        //     dps.length > 2 &&
+        //     dps.length > 1 &&
         //     dps[dps.length - 1].y === 0.0 &&
-        //     dps[dps.length - 2].y === 0.0 &&
-        //     dps[dps.length - 3].y === 0.0
+        //     dps[dps.length - 2].y === 0.0
         //   ) {
         //     delete historyTopics[c];
         //   } else {
@@ -78,12 +78,18 @@ window.onload = function() {
         //     });
         //   }
         // }
-        if (dps[dps.length - 1].x === xVal - 5) {
+
+        if (dps[dps.length - 1].x === xVal - 3) {
           delete historyTopics[c];
         }
-        if (dps.length > dataLength) {
+
+        while (dps.length > 0 && dps[0].x <= xVal - dataLength) {
           dps.shift();
         }
+
+        // if (dps.length > 0 && dps.length > dataLength) {
+        //   dps.shift();
+        // }
       }
 
       xVal += 1;
@@ -97,7 +103,7 @@ window.onload = function() {
           dataPoints: historyTopics[c]
         });
       }
-
+      console.log(curTopicData);
       chart.options.data = curTopicData;
       chart.render();
     }

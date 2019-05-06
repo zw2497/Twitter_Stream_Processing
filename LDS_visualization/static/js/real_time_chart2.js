@@ -1,7 +1,7 @@
 const svg2 = d3
   .select('.canvas2')
   .append('svg')
-  .attr('width', 700)
+  .attr('width', 720)
   .attr('height', 450);
 
 const t2 = d3.transition().duration(2500);

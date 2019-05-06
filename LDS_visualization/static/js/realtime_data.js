@@ -3,7 +3,7 @@ const t = d3.transition().duration(2500);
 const svg = d3
   .select('.canvas1')
   .append('svg')
-  .attr('width', 700)
+  .attr('width', 720)
   .attr('height', 450);
 
 // create margins and dimensions

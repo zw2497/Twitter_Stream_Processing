@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify, make_response, Response
-import json, time
+import json, time, os
 from datetime import datetime
 from google.cloud import bigquery
 from kafka import KafkaConsumer 
+from collections import defaultdict
 
 '''
 `pip install --upgrade google-cloud-bigquery`
@@ -10,6 +11,11 @@ Give authentication by the myAuth.json to the client
 `export GOOGLE_APPLICATION_CREDENTIALS="./myAuth.json"`
 '''
 app = Flask(__name__)
+
+try:
+    os.system('export GOOGLE_APPLICATION_CREDENTIALS="./myAuth.json"')
+except:
+    pass
 client = bigquery.Client()
 
 
@@ -72,21 +78,54 @@ def gettrend():
         enable_auto_commit=False,
         group_id=groupid
     )
-    a = []
 
-    def generate(consumer, a):
+    history = defaultdict(list)
+
+    def generate(consumer):
         start_time = time.time()
-        for message in consumer:
-            key, value = message.key, message.value
-            a.append([key.decode(), value.decode()])
-            if time.time() - start_time > 1:
-                a.sort(key=lambda x: -float(x[1]))
-                yield(str(dict(a[:10])).replace('\'', '\"'))
-                # print(a[:10])
-                a = []
-                start_time = time.time()
+        while True:
+            # key, value = message.key.decode(), message.value.decode()
+            # a.append([key.decode(), value.decode()])
+            # if time.time() - start_time > 2:
+            #     if len(a) > 10:
+            #         a.sort(key=lambda x: -float(x[1]))
+            #         yield(str(dict(a[:20])).replace('\'', '\"'))
+            #         print(a[:20])
+            #         a = []
+            #     start_time = time.time()
+            cur_poll = consumer.poll(timeout_ms=10000)
+            for pk, pv in cur_poll.items():
+                for p in pv:
+                    key, value = p.key.decode(), p.value.decode()
+                    if value != '0.0' and value != '-0.0':
+                        history[key].append(value)
+            print(history)
+            resp_list = []
+            for k, v in list(history.items()):
+                if len(v) != 0:
+                    resp_list.append([k, v.pop(0)])
+                if len(v) == 0:
+                    del history[k]
+            if len(resp_list) >= 5:
+                resp_list.sort(key=lambda x: -float(x[1]))
+                yield(str(dict(resp_list[:20])).replace('\'', '\"'))
+                # print(resp_list[:20])
+            time.sleep(1)
 
-    resp = Response(generate(consumer, a))
+            # if time.time() - start_time > 10:
+            #     resp_list = []
+            #     for k, v in list(history.items()):
+            #         if len(v) != 0:
+            #             resp_list.append([k, v.pop(0)])
+            #         if len(v) == 0:
+            #             del history[k]
+                
+            #     resp_list.sort(key=lambda x: -float(x[1]))
+            #     yield(str(dict(resp_list[:20])).replace('\'', '\"'))
+            #     print(resp_list[:20])
+            #     start_time = time.time()
+
+    resp = Response(generate(consumer))
     resp.headers['Access-Control-Allow-Origin'] = '*'
     resp.headers['Access-Control-Allow-Headers'] = '*'
     resp.headers['Access-Control-Allow-Methods'] = '*'
