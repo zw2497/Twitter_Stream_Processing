@@ -11,7 +11,12 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-    <title>SVG Basics</title>
+    <style>
+      .noborder {
+        border: none;
+      }
+    </style>
+    <title>Word Cloud</title>
   </head>
 
   <body class="transparent">
@@ -33,46 +38,61 @@
       </nav>
     </header>
 
-    <div class="container section">
-      <div class="row">
-        <div class="col s12 m12">
-          <table>
-            <tr>
-              <th>Topk1</th>
-              <th>Topk10</th>
-            </tr>
-            <tr>
-              <th>
-                <div
-                  class="tabs-content carousel carousel-slider"
-                  style="height: 500px; width: 500px;"
-                >
+    <div class="row">
+      <div class="col s12 m12">
+        <table class="noborder">
+          <tr class="noborder">
+            <th style="text-align:center;">
+              <h5>Ten Hashtags in 10 Seconds</h5>
+            </th>
+            <th style="text-align:center;">
+              <h5>Top Ten Hashtags in 1 Minute</h5>
+            </th>
+          </tr>
+          <tr class="noborder">
+            <th>
+              <div class="row">
+                <div class="col s2 m2"></div>
+                <div class="col s8 m8">
                   <div
-                    id="test-swipe-1"
-                    class="col s12 transparent carousel-item active"
-                    style="z-index: 0; opacity: 1; visibility: visible; transform: translateX(0px) translateY(0px) translateX(0px) translateZ(0px);"
+                    class="tabs-content carousel carousel-slider"
+                    style="height: 500px; width: 500px;"
                   >
-                    <div class="canvas1"></div>
+                    <div
+                      id="test-swipe-1"
+                      class="col s12 transparent carousel-item active"
+                      style="z-index: 0; opacity: 1; visibility: visible; transform: translateX(0px) translateY(0px) translateX(0px) translateZ(0px);"
+                    >
+                      <div class="canvas1"></div>
+                    </div>
                   </div>
                 </div>
-              </th>
-              <th>
-                <div
-                  class="tabs-content carousel carousel-slider"
-                  style="height: 500px; width: 500px;"
-                >
+                <div class="col s2 m2"></div>
+              </div>
+            </th>
+
+            <th>
+              <div class="row">
+                <div class="col s2 m2"></div>
+                <div class="col s8 m8">
                   <div
-                    id="test-swipe-1"
-                    class="col s12 transparent carousel-item active"
-                    style="z-index: 0; opacity: 1; visibility: visible; transform: translateX(0px) translateY(0px) translateX(0px) translateZ(0px);"
+                    class="tabs-content carousel carousel-slider"
+                    style="height: 500px; width: 500px;"
                   >
-                    <div class="canvas2"></div>
+                    <div
+                      id="test-swipe-1"
+                      class="col s12 transparent carousel-item active"
+                      style="z-index: 0; opacity: 1; visibility: visible; transform: translateX(0px) translateY(0px) translateX(0px) translateZ(0px);"
+                    >
+                      <div class="canvas2"></div>
+                    </div>
                   </div>
                 </div>
-              </th>
-            </tr>
-          </table>
-        </div>
+                <div class="col s2 m2"></div>
+              </div>
+            </th>
+          </tr>
+        </table>
       </div>
     </div>
     <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase-app.js"></script>

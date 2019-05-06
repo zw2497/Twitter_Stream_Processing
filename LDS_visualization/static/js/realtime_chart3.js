@@ -3,29 +3,29 @@ function wordCloud() {
 
   //Construct the word cloud's SVG element
   var svg = d3
-    .select(".canvas1")
-    .append("svg")
-    .attr("width", 500)
-    .attr("height", 500)
-    .append("g")
-    .attr("transform", "translate(150,250)");
+    .select('.canvas1')
+    .append('svg')
+    .attr('width', 500)
+    .attr('height', 500)
+    .append('g')
+    .attr('transform', 'translate(150,250)');
 
   //Draw the word cloud
   function draw(words) {
-    var cloud = svg.selectAll("g text").data(words, function(d) {
+    var cloud = svg.selectAll('g text').data(words, function(d) {
       return d.text;
     });
 
     //Entering words
     cloud
       .enter()
-      .append("text")
-      .style("font-family", "Impact")
-      .style("fill", function(d, i) {
+      .append('text')
+      .style('font-family', 'Impact')
+      .style('fill', function(d, i) {
         return fill(i);
       })
-      .attr("text-anchor", "middle")
-      .attr("font-size", 1)
+      .attr('text-anchor', 'middle')
+      .attr('font-size', 1)
       .text(function(d) {
         return d.text;
       });
@@ -34,21 +34,21 @@ function wordCloud() {
     cloud
       .transition()
       .duration(600)
-      .style("font-size", function(d) {
-        return d.size + "px";
+      .style('font-size', function(d) {
+        return d.size + 'px';
       })
-      .attr("transform", function(d) {
-        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+      .attr('transform', function(d) {
+        return 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')';
       })
-      .style("fill-opacity", 1);
+      .style('fill-opacity', 1);
 
     //Exiting words
     cloud
       .exit()
       .transition()
       .duration(200)
-      .style("fill-opacity", 1e-6)
-      .attr("font-size", 1)
+      .style('fill-opacity', 1e-6)
+      .attr('font-size', 1)
       .remove();
   }
 
@@ -56,17 +56,17 @@ function wordCloud() {
     update: function(words) {
       d3.layout
         .cloud()
-        .size([500, 500])
+        .size([400, 500])
         .words(words)
         .padding(5)
         .rotate(function() {
           return ~~(Math.random() * 2) * 90;
         })
-        .font("Impact")
+        .font('Impact')
         .fontSize(function(d) {
           return d.size;
         })
-        .on("end", draw)
+        .on('end', draw)
         .start();
     }
   };
@@ -74,33 +74,33 @@ function wordCloud() {
 
 function getWords(words) {
   return words
-    .replace(/[!\.,:;\?]/g, "")
-    .split(" ")
+    .replace(/[!\.,:;\?]/g, '')
+    .split(' ')
     .map(function(d) {
-      return { text: d, size: 10 + Math.random() * 60 };
+      return { text: d, size: 20 + Math.random() * 50 };
     });
 }
 function showNewWords(vis) {
   var data2 = [];
   var totalData2 = [];
 
-  db.collection("topk1")
-    .orderBy("count", "desc")
+  db.collection('topk1')
+    .orderBy('count', 'desc')
     .onSnapshot(res => {
       res.docChanges().forEach(change => {
         const doc = { ...change.doc.data(), id: change.doc.id };
 
         switch (change.type) {
-          case "added":
+          case 'added':
             totalData2.push(doc);
             break;
 
-          case "modified":
+          case 'modified':
             const index = totalData2.findIndex(item => item.id == doc.id);
             totalData2[index] = doc;
             break;
 
-          case "removed":
+          case 'removed':
             totalData2 = totalData2.filter(item => item.id !== doc.id);
             break;
 
@@ -108,10 +108,10 @@ function showNewWords(vis) {
             break;
         }
       });
-      var words = "";
+      var words = '';
       console.log(totalData2);
       for (let i in totalData2) {
-        words += totalData2[i].tag + " ";
+        words += totalData2[i].tag + ' ';
       }
       //   console.log(words);
       vis.update(getWords(words));

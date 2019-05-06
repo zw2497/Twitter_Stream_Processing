@@ -1,8 +1,8 @@
 const svg2 = d3
-  .select(".canvas2")
-  .append("svg")
-  .attr("width", 700)
-  .attr("height", 450);
+  .select('.canvas2')
+  .append('svg')
+  .attr('width', 700)
+  .attr('height', 450);
 
 const t2 = d3.transition().duration(2500);
 
@@ -12,13 +12,13 @@ const graph2Width = 700 - margin2.left - margin2.right;
 const graph2Height = 450 - margin2.top - margin2.bottom;
 
 const graph2 = svg2
-  .append("g")
-  .attr("width", graph2Width)
-  .attr("height", graph2Height)
-  .attr("transform", `translate(${margin2.left},${margin2.top})`);
-const texts2 = graph2.append("g");
+  .append('g')
+  .attr('width', graph2Width)
+  .attr('height', graph2Height)
+  .attr('transform', `translate(${margin2.left},${margin2.top})`);
+const texts2 = graph2.append('g');
 
-const yAxisGroup2 = graph2.append("g");
+const yAxisGroup2 = graph2.append('g');
 // .selectAll("text")
 // .attr("fill", "black")
 // .attr("transform", "rotate(-40)")
@@ -35,8 +35,8 @@ const y2 = d3
 const yAxis2 = d3.axisLeft(y2);
 
 const update2 = data2 => {
-  const rects2 = graph2.selectAll("rect").data(data2);
-  const text2 = texts2.selectAll("text").data(data2);
+  const rects2 = graph2.selectAll('rect').data(data2);
+  const text2 = texts2.selectAll('text').data(data2);
 
   y2.domain(data2.map(item2 => item2.tag));
   x2.domain([0, d3.max(data2, d => d.count)]);
@@ -45,91 +45,91 @@ const update2 = data2 => {
   text2.exit().remove();
 
   rects2
-    .attr("height", y2.bandwidth)
-    .attr("fill", d => {
+    .attr('height', y2.bandwidth)
+    .attr('fill', d => {
       if (d.sentiment > 0.5) {
-        return "#b3e5fc";
+        return '#b3e5fc';
       } else if (d.sentiment < 0.5) {
-        return "#01579b";
+        return '#01579b';
       } else {
-        return "#03a9f4";
+        return '#03a9f4';
       }
       // return inter(d.sentiment).colors[0];
     })
     .transition(t2)
-    .attr("width", d => x2(d.count));
+    .attr('width', d => x2(d.count));
 
   rects2
     .enter()
-    .append("rect")
-    .attr("fill", d => {
+    .append('rect')
+    .attr('fill', d => {
       if (d.sentiment > 0.5) {
-        return "#b3e5fc";
+        return '#b3e5fc';
       } else if (d.sentiment < 0.5) {
-        return "#01579b";
+        return '#01579b';
       } else {
-        return "#03a9f4";
+        return '#03a9f4';
       }
       // return inter(d.sentiment).colors[0];
     })
-    .attr("height", y2.bandwidth)
-    .attr("width", 0)
-    .attr("x", 0)
-    .attr("y", d => y2(d.tag))
+    .attr('height', y2.bandwidth)
+    .attr('width', 0)
+    .attr('x', 0)
+    .attr('y', d => y2(d.tag))
     .merge(rects2)
     .transition(t2)
-    .attrTween("height", heightTween2)
-    .attr("width", d => x2(d.count));
+    .attrTween('height', heightTween2)
+    .attr('width', d => x2(d.count));
 
   text2
     .text(d => d.count)
-    .attr("fill", "black")
-    .attr("x", d => x2(d.count))
-    .attr("y", d => {
+    .attr('fill', 'black')
+    .attr('x', d => x2(d.count))
+    .attr('y', d => {
       return y2(d.tag) + 20;
     })
-    .attr("font-size", 20);
+    .attr('font-size', 20);
   // .attr("transform", `translate(${0}, ${5})`);
 
   text2
     .enter()
-    .append("text")
-    .attr("fill", "black")
+    .append('text')
+    .attr('fill', 'black')
     .text(d => d.count)
-    .attr("x", d => x2(d.count))
-    .attr("y", d => {
+    .attr('x', d => x2(d.count))
+    .attr('y', d => {
       return y2(d.tag) + 20;
     })
-    .attr("font-size", 20);
+    .attr('font-size', 20);
 
   yGroup2 = yAxisGroup2.call(yAxis2);
 
   yGroup2
-    .selectAll("text")
-    .attr("fill", "black")
-    .attr("transform", "rotate(-20)")
-    .attr("text-anchor", "end")
-    .attr("font-size", 15);
+    .selectAll('text')
+    .attr('fill', 'black')
+    .attr('transform', 'rotate(-20)')
+    .attr('text-anchor', 'end')
+    .attr('font-size', 15);
 };
 
 var data2 = [];
 var totalData2 = [];
 
-db.collection("topk10").onSnapshot(res => {
+db.collection('topk10').onSnapshot(res => {
   res.docChanges().forEach(change => {
     const doc = { ...change.doc.data(), id: change.doc.id };
 
     switch (change.type) {
-      case "added":
+      case 'added':
         totalData2.push(doc);
         break;
 
-      case "modified":
+      case 'modified':
         const index = totalData2.findIndex(item => item.id == doc.id);
         totalData2[index] = doc;
         break;
 
-      case "removed":
+      case 'removed':
         totalData2 = totalData2.filter(item => item.id !== doc.id);
         break;
 
@@ -142,6 +142,7 @@ db.collection("topk10").onSnapshot(res => {
   });
 
   update2(totalData2);
+  updateList2(totalData2);
 });
 
 const heightTween2 = d => {
@@ -151,3 +152,16 @@ const heightTween2 = d => {
     return i2(t2);
   };
 };
+
+function updateList2(topicData) {
+  var listView = document.getElementById('table-body-2');
+  for (let i in topicData) {
+    var listStr = `<tr>
+    <td>${topicData[i].tag}</td>
+    <td>${topicData[i].count}</td>
+   
+    </tr>`;
+    listView.innerHTML += listStr;
+    document.getElementById('list-topics-2').scrollTop = listView.scrollHeight;
+  }
+}

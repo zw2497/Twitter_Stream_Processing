@@ -1,10 +1,10 @@
 const t = d3.transition().duration(2500);
 
 const svg = d3
-  .select(".canvas1")
-  .append("svg")
-  .attr("width", 700)
-  .attr("height", 450);
+  .select('.canvas1')
+  .append('svg')
+  .attr('width', 700)
+  .attr('height', 450);
 
 // create margins and dimensions
 const margin = { top: 20, right: 20, bottom: 40, left: 150 };
@@ -12,13 +12,13 @@ const graphWidth = 700 - margin.left - margin.right;
 const graphHeight = 450 - margin.top - margin.bottom;
 
 const graph = svg
-  .append("g")
-  .attr("width", graphWidth)
-  .attr("height", graphHeight)
-  .attr("transform", `translate(${margin.left},${margin.top})`);
+  .append('g')
+  .attr('width', graphWidth)
+  .attr('height', graphHeight)
+  .attr('transform', `translate(${margin.left},${margin.top})`);
 
-const yAxisGroup = graph.append("g");
-const texts = graph.append("g");
+const yAxisGroup = graph.append('g');
+const texts = graph.append('g');
 
 const x = d3.scaleLinear().range([0, graphWidth]);
 
@@ -33,15 +33,15 @@ const yAxis = d3.axisLeft(y);
 yGroup = yAxisGroup.call(yAxis);
 
 yGroup
-  .selectAll("text")
-  .attr("fill", "black")
-  .attr("transform", "rotate(-20)")
-  .attr("text-anchor", "end");
+  .selectAll('text')
+  .attr('fill', 'black')
+  .attr('transform', 'rotate(-20)')
+  .attr('text-anchor', 'end');
 
 // update the data
 const update = data => {
-  const rects = graph.selectAll("rect").data(data);
-  const text = texts.selectAll("text").data(data);
+  const rects = graph.selectAll('rect').data(data);
+  const text = texts.selectAll('text').data(data);
   // text = text.selectAll("text").data(data);
 
   y.domain(data.map(item => item.tag));
@@ -53,87 +53,87 @@ const update = data => {
   text.exit().remove();
 
   rects
-    .attr("height", y.bandwidth)
-    .attr("fill", d => {
+    .attr('height', y.bandwidth)
+    .attr('fill', d => {
       if (d.sentiment > 0.5) {
-        return "#b3e5fc";
+        return '#b3e5fc';
       } else if (d.sentiment < 0.5) {
-        return "#01579b";
+        return '#01579b';
       } else {
-        return "#03a9f4";
+        return '#03a9f4';
       }
       // return inter(d.sentiment).colors[0];
     })
     .transition(t)
-    .attr("width", d => x(d.count));
+    .attr('width', d => x(d.count));
 
   rects
     .enter()
-    .append("rect")
-    .attr("fill", d => {
+    .append('rect')
+    .attr('fill', d => {
       if (d.sentiment > 0.5) {
-        return "#b3e5fc";
+        return '#b3e5fc';
       } else if (d.sentiment < 0.5) {
-        return "#01579b";
+        return '#01579b';
       } else {
-        return "#03a9f4";
+        return '#03a9f4';
       }
       // return inter(d.sentiment).colors[0];
     })
-    .attr("height", y.bandwidth)
-    .attr("width", 0)
-    .attr("x", 0)
-    .attr("y", d => y(d.tag))
+    .attr('height', y.bandwidth)
+    .attr('width', 0)
+    .attr('x', 0)
+    .attr('y', d => y(d.tag))
     .merge(rects)
     .transition(t)
-    .attrTween("height", heightTween)
-    .attr("width", d => x(d.count));
+    .attrTween('height', heightTween)
+    .attr('width', d => x(d.count));
 
   text
     .text(d => d.count)
-    .attr("fill", "black")
-    .attr("font-size", 20);
+    .attr('fill', 'black')
+    .attr('font-size', 20);
 
   text
     .enter()
-    .append("text")
-    .attr("fill", "black")
+    .append('text')
+    .attr('fill', 'black')
     .merge(text)
     .transition(t)
     .text(d => d.count)
-    .attr("x", d => x(d.count))
-    .attr("y", d => {
+    .attr('x', d => x(d.count))
+    .attr('y', d => {
       return y(d.tag) + 20;
     })
-    .attr("font-size", 20);
+    .attr('font-size', 20);
 
   yGroup = yAxisGroup.call(yAxis);
 
   yGroup
-    .selectAll("text")
-    .attr("font-size", 15)
-    .attr("fill", "black")
-    .attr("transform", "rotate(-20)")
-    .attr("text-anchor", "end");
+    .selectAll('text')
+    .attr('font-size', 15)
+    .attr('fill', 'black')
+    .attr('transform', 'rotate(-20)')
+    .attr('text-anchor', 'end');
 };
 
 var totalData = [];
 
-db.collection("topk1").onSnapshot(res => {
+db.collection('topk1').onSnapshot(res => {
   res.docChanges().forEach(change => {
     const doc = { ...change.doc.data(), id: change.doc.id };
 
     switch (change.type) {
-      case "added":
+      case 'added':
         totalData.push(doc);
         break;
 
-      case "modified":
+      case 'modified':
         const index = totalData.findIndex(item => item.id == doc.id);
         totalData[index] = doc;
         break;
 
-      case "removed":
+      case 'removed':
         totalData = totalData.filter(item => item.id !== doc.id);
         break;
 
@@ -146,6 +146,7 @@ db.collection("topk1").onSnapshot(res => {
     return b.count - a.count;
   });
   update(totalData);
+  updateList(totalData);
 });
 
 const heightTween = d => {
@@ -155,3 +156,16 @@ const heightTween = d => {
     return i(t);
   };
 };
+
+function updateList(topicData) {
+  var listView = document.getElementById('table-body-1');
+  for (let i in topicData) {
+    var listStr = `<tr>
+    <td>${topicData[i].tag}</td>
+    <td>${topicData[i].count}</td>
+   
+    </tr>`;
+    listView.innerHTML += listStr;
+    document.getElementById('list-topics').scrollTop = listView.scrollHeight;
+  }
+}
