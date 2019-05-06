@@ -1,20 +1,20 @@
 window.onload = function() {
   var historyTopics = {};
 
-  var chart = new CanvasJS.Chart("chartContainer", {
+  var chart = new CanvasJS.Chart('chartContainer', {
     animationEnabled: true,
-    theme: "light2",
+    theme: 'light2',
     title: {
-      text: "Twitter Trend"
+      text: 'Twitter Trend'
     },
     legend: {
-      cursor: "pointer",
+      cursor: 'pointer',
       fontSize: 15,
       itemclick: toggleDataSeries
     },
     axisX: {
       interval: 1,
-      interlacedColor: "#F8F1E4",
+      interlacedColor: '#F8F1E4',
       labelFontSize: 0
     },
     axisY: {
@@ -43,12 +43,12 @@ window.onload = function() {
   var dataLength = 20; // number of dataPoints visible at any point
 
   var xhr = new XMLHttpRequest();
-  var url = "http://localhost:6789/gettrend";
+  var url = 'http://localhost:6789/gettrend';
 
   xhr.onreadystatechange = function() {
     if (xhr.readyState === 3) {
-      var respArr = xhr.responseText.split("}");
-      var curResp = JSON.parse(respArr[respArr.length - 2] + "}");
+      var respArr = xhr.responseText.split('}');
+      var curResp = JSON.parse(respArr[respArr.length - 2] + '}');
 
       for (let c in curResp) {
         var dps = historyTopics[c] || [];
@@ -63,22 +63,24 @@ window.onload = function() {
 
       for (let c in historyTopics) {
         var dps = historyTopics[c];
-        if (dps[dps.length - 1].x != xVal) {
-          if (
-            dps.length > 2 &&
-            dps[dps.length - 1].y === 0.0 &&
-            dps[dps.length - 2].y === 0.0 &&
-            dps[dps.length - 3].y === 0.0
-          ) {
-            delete historyTopics[c];
-          } else {
-            dps.push({
-              x: xVal,
-              y: 0
-            });
-          }
+        // if (dps[dps.length - 1].x != xVal) {
+        //   if (
+        //     dps.length > 2 &&
+        //     dps[dps.length - 1].y === 0.0 &&
+        //     dps[dps.length - 2].y === 0.0 &&
+        //     dps[dps.length - 3].y === 0.0
+        //   ) {
+        //     delete historyTopics[c];
+        //   } else {
+        //     dps.push({
+        //       x: xVal,
+        //       y: 0
+        //     });
+        //   }
+        // }
+        if (dps[dps.length - 1].x === xVal - 5) {
+          delete historyTopics[c];
         }
-
         if (dps.length > dataLength) {
           dps.shift();
         }
@@ -90,7 +92,7 @@ window.onload = function() {
       for (let c in historyTopics) {
         curTopicData.push({
           name: c,
-          type: "line",
+          type: 'line',
           showInLegend: true,
           dataPoints: historyTopics[c]
         });
@@ -101,12 +103,12 @@ window.onload = function() {
     }
   };
 
-  xhr.open("GET", url);
+  xhr.open('GET', url);
   xhr.send();
 };
 
 function toggleDataSeries(e) {
-  if (typeof e.dataSeries.visible === "undefined" || e.dataSeries.visible) {
+  if (typeof e.dataSeries.visible === 'undefined' || e.dataSeries.visible) {
     e.dataSeries.visible = false;
   } else {
     e.dataSeries.visible = true;
