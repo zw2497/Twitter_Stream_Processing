@@ -37,7 +37,7 @@ def getquery():
         print(QUERY)
         query_job = client.query(QUERY)  # API request
         rows = query_job.result()  # Waits for query to finish
-
+        
         json_rows = []
         for row in rows:
             tmp_dict = {}
