@@ -1,0 +1,181 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <style>
+      #list-topics,
+      #list-topics-2 {
+        max-height: 400px;
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
+      }
+      #android-emoji-sad,
+      #android-emoji-happy {
+        height: 35px;
+        width: 40px;
+      }
+      .simple-linear {
+        width: 30px;
+        height: 330px;
+        background: linear-gradient(#b3e5fc, #01579b);
+      }
+    </style>
+    <title>TopK</title>
+  </head>
+
+  <body class="transparent">
+    <header>
+      <nav>
+        <div class="nav-wrapper" style="background:#03a9f4">
+          <a class="brand-logo"
+            ><i class="large left material-icons">insert_chart</i>Twitter
+            Visualizer</a
+          >
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="index.html">Project Introduction</a></li>
+            <li><a href="realtime_data.html">TopK</a></li>
+            <li><a href="wordcloud.html">WordCloud</a></li>
+            <li><a href="trend.html">Trend</a></li>
+            <li><a href="static_data.html">Static</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <div class="section">
+      <div class="row">
+        <div>
+          <h4 class="center">Top Ten Hashtags in 10 Seconds</h4>
+        </div>
+        <div class="col s1 m1">
+          <div class="container" style="margin-left:30px">
+            <div>
+              <h6 class="title"><strong>Sentiment Indicator</strong></h6>
+            </div>
+            <table style="border: none">
+              <tr style="border: none">
+                <th rowspan="2"><div class="simple-linear"></div></th>
+                <th style="vertical-align:top;">
+                  <img src="emoji-happy.png" id="android-emoji-happy" />
+                </th>
+              </tr>
+              <tr style="border: none">
+                <th style="vertical-align:bottom;">
+                  <img src="emoji-sad.png" id="android-emoji-sad" />
+                </th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="col s8 m8">
+          <div class="row">
+            <div
+              class="tabs-content carousel carousel-slider"
+              style="height:500px; width: 100%;"
+            >
+              <div
+                id="test-swipe-1"
+                class="col s12 transparent carousel-item active"
+                style="z-index: 0; opacity: 1; visibility: visible; transform: translateX(0px) translateY(0px) translateX(5px) translateZ(0px);"
+              >
+                <div class="canvas1"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col s3 m3" style="padding-right: -10px; margin-top: 20px">
+          <div id="list-topics">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hashtag</th>
+                  <th>Count</th>
+                  <!-- <th>Sentiment</th> -->
+                </tr>
+              </thead>
+              <tbody id="table-body-1"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <h4 class="center">Top Ten Hashtags in 1 Minute</h4>
+        </div>
+        <div class="col s1 m1">
+          <div class="container" style="margin-left:30px">
+            <div>
+              <h6 class="title"><strong>Sentiment Indicator</strong></h6>
+            </div>
+            <table style="border: none">
+              <tr style="border: none">
+                <th rowspan="2"><div class="simple-linear"></div></th>
+                <th style="vertical-align:top;">
+                  <img src="emoji-happy.png" id="android-emoji-happy" />
+                </th>
+              </tr>
+              <tr style="border: none">
+                <th style="vertical-align:bottom;">
+                  <img src="emoji-sad.png" id="android-emoji-sad" />
+                </th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="col s8 m8">
+          <div class="row">
+            <div
+              class="tabs-content carousel carousel-slider"
+              style="height:500px; width: 100%;"
+            >
+              <div
+                id="test-swipe-1"
+                class="col s12 transparent carousel-item active"
+                style="z-index: 0; opacity: 1; visibility: visible; transform: translateX(0px) translateY(0px) translateX(5px) translateZ(0px);"
+              >
+                <div class="canvas2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col s3 m3" style="padding-right: -10px; margin-top: 20px">
+          <div id="list-topics-2">
+            <table>
+              <thead>
+                <tr>
+                  <th>Hashtag</th>
+                  <th>Count</th>
+                  <!-- <th>Sentiment</th> -->
+                </tr>
+              </thead>
+              <tbody id="table-body-2"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase-firestore.js"></script>
+    <script src="../static/js/connectFireBase.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://d3js.org/d3-color.v1.min.js"></script>
+    <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.js"></script>
+    <script src="../static/js/realtime_data.js"></script>
+    <script src="../static/js/real_time_chart2.js"></script>
+  </body>
+</html>

@@ -11,30 +11,34 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
-    <title>SVG Basics</title>
+    <script src="assets/js/canvasChart.js"></script>
+    <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <title>Trend</title>
   </head>
+
   <body class="transparent">
     <header>
       <nav>
-        <div class="nav-wrapper">
+        <div class="nav-wrapper" style="background:#03a9f4">
           <a class="brand-logo"
             ><i class="large left material-icons">insert_chart</i>Twitter
             Visualizer</a
           >
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="index.html">Project Introduction</a></li>
-            <li><a href="realtime_data.html">Real-time</a></li>
+            <li><a href="realtime_data.html">TopK</a></li>
+            <li><a href="wordcloud.html">WordCloud</a></li>
+            <li><a href="trend.html">Trend</a></li>
             <li><a href="static_data.html">Static</a></li>
           </ul>
         </div>
       </nav>
     </header>
-
-    <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase-firestore.js"></script>
-    <script src="../static/js/connectFireBase.js"></script>
+    <div
+      id="chartContainer"
+      style="height: 500px; width: 100%; margin-top: 30px"
+    ></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <script src="https://d3js.org/d3.v5.js"></script>
-    <script src="../static/js/static_data.js"></script>
   </body>
 </html>
