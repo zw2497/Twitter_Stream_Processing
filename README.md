@@ -18,7 +18,8 @@ Streaming system functions:
 
 
 
-Visualization:
+
+Visualization p:
 
 Real-time Top K Hashtags (D3.js):
 
