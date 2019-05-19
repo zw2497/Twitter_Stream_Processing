@@ -7,7 +7,7 @@ Zhicheng Wu, Linnan Li, Penghe Zhang, Boyuan Sun
 
 ## Instructions
 
-Streaming system functions:
+#### Streaming system functions:
 
 | Functions      | Colab |
 | ----------- | ----------- |
@@ -17,7 +17,7 @@ Streaming system functions:
 | Kafka Consumer and Producer   | [![Alt text](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/zw2497/Twitter_Stream_Processing/blob/master/PythonKafka.ipynb)      |
 
 
-Visualization part:
+#### Visualization part:
 
 Real-time Top K Hashtags (D3.js):
 
