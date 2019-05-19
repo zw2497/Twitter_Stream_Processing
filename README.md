@@ -17,9 +17,7 @@ Streaming system functions:
 | Kafka Consumer and Producer   | [![Alt text](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/zw2497/Twitter_Stream_Processing/blob/master/PythonKafka.ipynb)      |
 
 
-
-
-Visualization p:
+Visualization part:
 
 Real-time Top K Hashtags (D3.js):
 
