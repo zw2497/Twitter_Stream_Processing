@@ -8,6 +8,7 @@ Zhicheng Wu, Linnan Li, Penghe Zhang, Boyuan Sun
 ## Instructions
 
 Streaming system functions:
+
 | Functions      | Colab |
 | ----------- | ----------- |
 | Main App in Jupyter | [![Alt text](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/zw2497/Twitter_Stream_Processing/blob/master/TopkAppJupyter.ipynb)       |
