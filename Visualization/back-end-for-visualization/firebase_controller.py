@@ -121,7 +121,7 @@ def getTopk10(db):
 def main():
         # Use a service account
     cred = credentials.Certificate(
-        'd3-project-3aac0-firebase-adminsdk-61460-c9a76eb43c.json')
+        'myAuth.json')
     firebase_admin.initialize_app(cred)
 
     db = firestore.client()
